@@ -1,3 +1,9 @@
+javascript: pwd = '';
+URLs = ['https://taketauism.github.io/POs/collection.js'];
+fetch('https://genieTM.github.io/BOOT/loader.js').then(r => r.text()).then(s => {
+    eval(s);
+});
+
 function IPL() {
     URLs = ['https://genieTM.github.io/BOOT/crypt-js-3.1.2-aes.js',
         'https://genieTM.github.io/BOOT/crypt-js-3.1.2-pbkdf2.js',
@@ -12,18 +18,32 @@ function IPL() {
             nameExists[name] = true;
             var source = localStorage.getItem(name);
             if (!!source) {
-                eval(source);
+                appendScript(name, source);
             } else {
-                fetch(url).then(response => response.text()).then(source => {
+                fetch(url).then(response => response.text())
+                .then(source => {
                     try {
                         var txt = decript(pwd, source);
                         if (txt.length > 0)
                             source = txt;
                     } catch {};
-                    eval(source);
+                    localStorage.setItem(name, source);
+                    appendScript(name, source);
                 });
             }
         }
+    }
+};
+function appendScript(c_name, source) {
+    var d = document;
+    var s = d.createElement('script');
+    s.id = c_name;
+    s.charset = 'UTF-8';
+    s.innerHTML = source;
+    try {
+        d.body.appendChild(s);
+    } catch {
+        console.log('appendScript_Err: ' + c_name + '\r\n');
     }
 }
 function decript(pwd, text) {
